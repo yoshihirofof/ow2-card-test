@@ -54,7 +54,9 @@ function drawCharacters(ctx) {
 
       // ---- ステータス設定（仮） ----
       // ここでは例として i % 3 で切り替え（0:得意, 1:使える, 2:苦手）
-      const status = i % 3;
+      // const status = i % 3;
+      // モックデータ
+      const status = characterStatus[file.replace(".png", "")] ?? 1;
 
       img.onload = (() => {
         const drawX = x;

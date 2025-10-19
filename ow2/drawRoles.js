@@ -1,9 +1,9 @@
 function drawRoles(ctx) {
   // ====== ロール情報 ======
   const roles = [
-    { name: "タンク", rank: "P1", pos: 0, color: "#4DA6FF" },
+    { name: "タンク", rank: "D3", pos: 0, color: "#4DA6FF" },
     { name: "ダメージ", rank: "D5", pos: 1, color: "#FF6666" },
-    { name: "サポート", rank: "GM1", pos: 2, color: "#66FFAA" },
+    { name: "サポート", rank: "D4", pos: 0, color: "#66FFAA" },
   ];
 
   // SVGソース定義
