@@ -71,7 +71,7 @@ const rolesForIcons = ["タンク", "ダメージ", "サポート"];
 const iconsPerRow = 3;
 const size = 100;
 const padding = 40;
-const startY = 550;
+const startY = 480;
 
 rolesForIcons.forEach((role, ri) => {
   const img = new Image();
