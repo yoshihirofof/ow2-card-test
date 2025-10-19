@@ -77,8 +77,8 @@ roles.forEach((r, i) => {
   const svg = svgIcons[r.name];
   const iconSize = 48;
   const iconX = 60;
-  const iconY = baseY - iconSize / 2; // 中心合わせ
-  const textY = baseY + 10; // 少し下げて中央に見せる
+  const iconY = baseY - iconSize / 2;
+  const textY = baseY + 10;
 
   // アイコン描画
   drawSVGtoCanvas(svg, iconX, iconY, iconSize, r.color, () => {
@@ -87,10 +87,10 @@ roles.forEach((r, i) => {
   });
 
   // --- 棒線とインジケータ ---
-  const barX = 280;   // 棒線を右に少しずらす
-  const barY = baseY; // 中央寄せ
-  const barW = 240;   // 少し短くして3段階
-  const sections = 2; // 区切り3つ
+  const barX = 330;   // ← 右に少し移動（以前: 280）
+  const barY = baseY;
+  const barW = 240;
+  const sections = 2;
 
   ctx.strokeStyle = "#aaa";
   ctx.lineWidth = 2;
@@ -99,7 +99,6 @@ roles.forEach((r, i) => {
   ctx.lineTo(barX + barW, barY);
   ctx.stroke();
 
-  // 区切り線
   for (let j = 0; j <= sections; j++) {
     const x = barX + (barW / sections) * j;
     ctx.beginPath();
@@ -108,13 +107,13 @@ roles.forEach((r, i) => {
     ctx.stroke();
   }
 
-  // インジケータ（0=得意,1=普通,2=苦手）
   const index = r.pos;
   ctx.fillStyle = "#fff";
   ctx.beginPath();
   ctx.arc(barX + (barW / sections) * index, barY - 10, 6, 0, Math.PI * 2);
   ctx.fill();
 });
+
 
 
 // ====== キャラアイコン群（ここはそのまま） ======
@@ -127,7 +126,7 @@ const rolesForIcons = ["タンク", "ダメージ", "サポート"];
 const iconsPerRow = 5;
 const size = 64;
 const padding = 24;
-const startY = 480;
+const startY = 520;
 
 rolesForIcons.forEach((role, ri) => {
   const img = new Image();
