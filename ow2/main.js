@@ -73,15 +73,25 @@ function drawSVGtoCanvas(svgString, x, y, size, color, callback) {
 
 ctx.font = "24px sans-serif";
 roles.forEach((r, i) => {
-  const y = 230 + i * 100;
+  const baseY = 230 + i * 100;
   const svg = svgIcons[r.name];
+  const iconSize = 48;
+  const iconX = 60;
+  const iconY = baseY - iconSize / 2; // 中心合わせ
+  const textY = baseY + 10; // 少し下げて中央に見せる
 
-  drawSVGtoCanvas(svg, 60, y - 40, 48, r.color, () => {
+  // アイコン描画
+  drawSVGtoCanvas(svg, iconX, iconY, iconSize, r.color, () => {
     ctx.fillStyle = "#fff";
-    ctx.fillText(`${r.name} ${r.rank}`, 120, y);
+    ctx.fillText(`${r.name} ${r.rank}`, iconX + 70, textY);
   });
 
-  const barX = 250, barY = y - 10, barW = 300;
+  // --- 棒線とインジケータ ---
+  const barX = 280;   // 棒線を右に少しずらす
+  const barY = baseY; // 中央寄せ
+  const barW = 240;   // 少し短くして3段階
+  const sections = 2; // 区切り3つ
+
   ctx.strokeStyle = "#aaa";
   ctx.lineWidth = 2;
   ctx.beginPath();
@@ -89,20 +99,23 @@ roles.forEach((r, i) => {
   ctx.lineTo(barX + barW, barY);
   ctx.stroke();
 
-  for (let j = 0; j <= 3; j++) {
-    const x = barX + (barW / 3) * j;
+  // 区切り線
+  for (let j = 0; j <= sections; j++) {
+    const x = barX + (barW / sections) * j;
     ctx.beginPath();
     ctx.moveTo(x, barY - 5);
     ctx.lineTo(x, barY + 5);
     ctx.stroke();
   }
 
+  // インジケータ（0=得意,1=普通,2=苦手）
   const index = r.pos;
   ctx.fillStyle = "#fff";
   ctx.beginPath();
-  ctx.arc(barX + (barW / 3) * index, barY - 10, 6, 0, Math.PI * 2);
+  ctx.arc(barX + (barW / sections) * index, barY - 10, 6, 0, Math.PI * 2);
   ctx.fill();
 });
+
 
 // ====== キャラアイコン群（ここはそのまま） ======
 const icons = {
