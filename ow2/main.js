@@ -2,7 +2,8 @@ const canvas = document.getElementById("card");
 const ctx = canvas.getContext("2d");
 
 canvas.width = 720;
-canvas.height = 1900;
+canvas.height = 1100;
+
 
 // 背景
 ctx.fillStyle = "#28313b";
@@ -164,43 +165,58 @@ const characters = {
 };
 
 const rolesForIcons = ["タンク", "ダメージ", "サポート"];
-const iconsPerRow = 5;
-const size = 64;
-const padding = 24;
-const startY = 560;
+const iconsPerRow = 8;
+const size = 48;
+const padding = 10;
+const startY = 520;
 
-rolesForIcons.forEach((role, ri) => {
-  const baseY = startY + ri * (size * 2 + 140); // ← 行間を少し広く（120→140）
+let currentY = startY;
+
+rolesForIcons.forEach((role) => {
   ctx.fillStyle = "#ccc";
   ctx.font = "bold 28px sans-serif";
   ctx.textAlign = "left";
-  ctx.fillText(role, 80, baseY - 20);
+  ctx.fillText(role, 80, currentY - 20);
 
-  characters[role].forEach((file, i) => {
+  const charList = characters[role];
+
+  charList.forEach((file, i) => {
     const img = new Image();
     img.src = `${characterPaths[role]}/${file}`;
-    img.onload = () => {
-      const x = 80 + (i % iconsPerRow) * (size + padding);
-      const y = baseY + Math.floor(i / iconsPerRow) * (size + 20);
-      ctx.drawImage(img, x, y, size, size);
 
-      // 状態表示（仮: ♥ or 暗転）
-      const status = i % 5; // 5パターンで散らす
-      if (status === 4) {
-        ctx.fillStyle = "rgba(0,0,0,0.5)";
-        ctx.fillRect(x, y, size, size);
-      } else if (status === 0) {
-        ctx.fillStyle = "#ff6688";
-        ctx.font = "bold 26px sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText("♥", x + size / 2 + 14, y + size / 2 - 14);
-        ctx.textAlign = "left";
-        ctx.textBaseline = "alphabetic";
-      }
-    };
+    // x,yをここで計算して「閉じ込める」
+    const x = 80 + (i % iconsPerRow) * (size + padding);
+    const y = currentY + Math.floor(i / iconsPerRow) * (size + 20);
+
+    img.onload = (() => {
+      const drawX = x;
+      const drawY = y;
+      return () => {
+        ctx.drawImage(img, drawX, drawY, size, size);
+
+        const status = i % 5;
+        if (status === 4) {
+          ctx.fillStyle = "rgba(0,0,0,0.5)";
+          ctx.fillRect(drawX, drawY, size, size);
+        } else if (status === 0) {
+          ctx.fillStyle = "#ff6688";
+          ctx.font = "bold 26px sans-serif";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("♥", drawX + size / 2 + 14, drawY + size / 2 - 14);
+          ctx.textAlign = "left";
+          ctx.textBaseline = "alphabetic";
+        }
+      };
+    })();
   });
+
+  // === 次のロールの開始位置を動的にずらす ===
+  const rowCount = Math.ceil(charList.length / iconsPerRow);
+  currentY += rowCount * (size + 10) + 80; // ← 余白詰め
 });
+
+
 
 
 
