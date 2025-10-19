@@ -135,12 +135,34 @@ roles.forEach((r, i) => {
 
 
 
-// ====== キャラアイコン群 ======
-const icons = {
-  "タンク": "assets/tank.png",
-  "ダメージ": "assets/damage.png",
-  "サポート": "assets/support.png"
+// ====== キャラアイコン群（実アイコン） ======
+const characterPaths = {
+  "タンク": "assets/character/tank",
+  "ダメージ": "assets/character/damage",
+  "サポート": "assets/character/support"
 };
+
+const characters = {
+  "タンク": [
+    "D.Va.png", "ウィンストン.png", "オリーサ.png", "ザリア.png", "シグマ.png",
+    "ジャンカー・クイーン.png", "ドゥームフィスト.png", "ハザード.png", "マウガ.png",
+    "ラインハルト.png", "ラマットラ.png", "レッキング・ボール.png", "ロードホッグ.png"
+  ],
+
+  "ダメージ": [
+    "リーパー.png", "アッシュ.png", "ウィドウメイカー.png", "エコー.png", "キャスディ.png",
+    "ゲンジ.png", "ジャンクラット.png", "シンメトラ.png", "ソジョーン.png", "ソルジャー76.png",
+    "ソンブラ.png", "トールビョーン.png", "トレーサー.png", "バスティオン.png", "ハンゾー.png",
+    "ファラ.png", "フレイヤ.png", "ベンチャー.png", "メイ.png"
+  ],
+
+  "サポート": [
+    "ルシオ.png", "アナ.png", "イラリー.png", "ウーヤン.png", "キリコ.png",
+    "ジュノ.png", "ゼニヤッタ.png", "バティスト.png", "ブリギッテ.png", "マーシー.png",
+    "モイラ.png", "ライフウィーバー.png"
+  ]
+};
+
 const rolesForIcons = ["タンク", "ダメージ", "サポート"];
 const iconsPerRow = 5;
 const size = 64;
@@ -148,23 +170,24 @@ const padding = 24;
 const startY = 560;
 
 rolesForIcons.forEach((role, ri) => {
-  const img = new Image();
-  img.src = icons[role];
-  img.onload = () => {
-    const baseY = startY + ri * (size * 2 + 120);
-    ctx.fillStyle = "#ccc";
-    ctx.font = "bold 28px sans-serif";
-    ctx.textAlign = "left";
-    ctx.fillText(role, 80, baseY - 20);
+  const baseY = startY + ri * (size * 2 + 140); // ← 行間を少し広く（120→140）
+  ctx.fillStyle = "#ccc";
+  ctx.font = "bold 28px sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText(role, 80, baseY - 20);
 
-    for (let i = 0; i < 6; i++) {
+  characters[role].forEach((file, i) => {
+    const img = new Image();
+    img.src = `${characterPaths[role]}/${file}`;
+    img.onload = () => {
       const x = 80 + (i % iconsPerRow) * (size + padding);
       const y = baseY + Math.floor(i / iconsPerRow) * (size + 20);
       ctx.drawImage(img, x, y, size, size);
 
-      const status = i % 3;
-      if (status === 2) {
-        ctx.fillStyle = "rgba(0,0,0,0.6)";
+      // 状態表示（仮: ♥ or 暗転）
+      const status = i % 5; // 5パターンで散らす
+      if (status === 4) {
+        ctx.fillStyle = "rgba(0,0,0,0.5)";
         ctx.fillRect(x, y, size, size);
       } else if (status === 0) {
         ctx.fillStyle = "#ff6688";
@@ -175,9 +198,14 @@ rolesForIcons.forEach((role, ri) => {
         ctx.textAlign = "left";
         ctx.textBaseline = "alphabetic";
       }
-    }
-  };
+    };
+  });
 });
+
+
+
+
+
 
 // ====== 保存ボタン ======
 document.getElementById("saveBtn").addEventListener("click", () => {
