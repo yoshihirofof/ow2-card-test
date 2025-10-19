@@ -68,23 +68,23 @@ function drawSVGtoCanvas(svgString, x, y, size, color) {
 }
 
 // ====== ロール描画 ======
-ctx.font = "24px sans-serif";
 roles.forEach((r, i) => {
   const baseY = 250 + i * 80;  // 行間
-  const iconSize = 40; // 少し小さくして行間に馴染ませる
+  const iconSize = 70;
   const iconX = 60;
-  const iconY = baseY - iconSize / 2 - 2; // テキストよりちょい上
+  const iconY = baseY - iconSize / 2 - 2;
 
   // アイコン
   drawSVGtoCanvas(svgIcons[r.name], iconX, iconY, iconSize, r.color);
 
-  // テキスト（縦中央そろえ）
+  // ==== ロール名とランク ====
+  ctx.font = "24px sans-serif";  // ← ロール用フォント
   ctx.fillStyle = "#fff";
   ctx.textAlign = "left";
   ctx.textBaseline = "middle";
   ctx.fillText(`${r.name} ${r.rank}`, iconX + iconSize + 18, baseY);
 
-  // 棒線（少し右にずらす）
+  // ==== 棒線 ====
   const barX = 360;
   const barY = baseY;
   const barW = 200;
@@ -96,9 +96,9 @@ roles.forEach((r, i) => {
   ctx.lineTo(barX + barW, barY);
   ctx.stroke();
 
-  // 区切り線とラベル
+  // ==== 好き・苦手ラベル ====
   const labels = ["好き", "", "苦手"];
-  ctx.font = "18px sans-serif";
+  ctx.font = "14px sans-serif";  // ← ラベル用フォント
   ctx.fillStyle = "#ccc";
   ctx.textAlign = "center";
   labels.forEach((label, j) => {
@@ -107,16 +107,17 @@ roles.forEach((r, i) => {
     ctx.moveTo(x, barY - 5);
     ctx.lineTo(x, barY + 5);
     ctx.stroke();
-    ctx.fillText(label, x, barY + 28);
+    ctx.fillText(label, x, barY + 26);
   });
 
-  // インジケータ
+  // ==== インジケータ ====
   const index = r.pos;
   ctx.fillStyle = "#fff";
   ctx.beginPath();
   ctx.arc(barX + (barW / sections) * index, barY - 10, 6, 0, Math.PI * 2);
   ctx.fill();
 });
+
 
 
 // ====== キャラアイコン群 ======
