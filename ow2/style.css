@@ -14,6 +14,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  padding-bottom: 80px;
 }
 
 canvas {
@@ -34,4 +35,13 @@ button {
 
 button:hover {
   background: #388de0;
+}
+
+canvas {
+  max-width: 100%;     /* 横幅は画面内に収まるように */
+  height: auto;        /* 縦は比率維持 */
+  display: block;      /* スクロール余白のずれ防止 */
+  background: #202630;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.6);
 }

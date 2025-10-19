@@ -1,6 +1,9 @@
 const canvas = document.getElementById("card");
 const ctx = canvas.getContext("2d");
 
+canvas.width = 720;
+canvas.height = 1900; // 固定描画サイズはこのまま
+
 // 背景
 ctx.fillStyle = "#28313b";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
