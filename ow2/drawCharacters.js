@@ -54,7 +54,7 @@ function drawCharacters(ctx) {
 
       // ---- ステータス設定（仮） ----
       // ここでは例として i % 3 で切り替え（0:得意, 1:使える, 2:苦手）
-      const status = i % 3;  
+      const status = i % 3;
 
       img.onload = (() => {
         const drawX = x;
@@ -71,12 +71,10 @@ function drawCharacters(ctx) {
           }
 
           if (status === 0) {
-            // 得意（ハート＋淡く光る円）
-            ctx.strokeStyle = "rgba(255,102,136,0.6)";
+            // 得意（赤い囲い＋ハート）
+            ctx.strokeStyle = "rgba(255,102,136,0.8)"; // ピンクがかった赤
             ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.arc(drawX + size / 2, drawY + size / 2, size / 2 + 3, 0, Math.PI * 2);
-            ctx.stroke();
+            ctx.strokeRect(drawX - 1, drawY - 1, size + 2, size + 2); // 少し外側に広げて囲う
 
             ctx.fillStyle = "#ff6688";
             ctx.font = "bold 26px sans-serif";
