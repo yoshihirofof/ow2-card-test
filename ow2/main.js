@@ -53,13 +53,10 @@ const svgIcons = {
 };
 
 // SVG描画関数
-function drawSVGtoCanvas(svgString, x, y, size, color, callback) {
-  // 塗りつぶしも枠線も統一色にする
+function drawSVGtoCanvas(svgString, x, y, size, color) {
   let svg = svgString
     .replace(/fill="COLOR"/g, `fill="${color}"`)
-    .replace(/stroke="COLOR"/g, `stroke="${color}"`)
-    .replace(/stroke-width="2"/g, 'stroke-width="0"'); // 枠線を消す
-
+    .replace(/stroke="COLOR"/g, `stroke="${color}"`);
   const blob = new Blob([svg], { type: "image/svg+xml" });
   const url = URL.createObjectURL(blob);
   const img = new Image();
@@ -67,31 +64,31 @@ function drawSVGtoCanvas(svgString, x, y, size, color, callback) {
   img.onload = () => {
     ctx.drawImage(img, x, y, size, size);
     URL.revokeObjectURL(url);
-    if (callback) callback();
   };
 }
 
+// ====== ロール描画 ======
 ctx.font = "24px sans-serif";
 roles.forEach((r, i) => {
-  const baseY = 230 + i * 100;
-  const svg = svgIcons[r.name];
-  const iconSize = 48;
+  const baseY = 250 + i * 120;
+  const iconSize = 40; // 少し小さくして行間に馴染ませる
   const iconX = 60;
-  const iconY = baseY - iconSize / 2;
-  const textY = baseY + 10;
+  const iconY = baseY - iconSize / 2 - 2; // テキストよりちょい上
 
-  // アイコン描画
-  drawSVGtoCanvas(svg, iconX, iconY, iconSize, r.color, () => {
-    ctx.fillStyle = "#fff";
-    ctx.fillText(`${r.name} ${r.rank}`, iconX + 70, textY);
-  });
+  // アイコン
+  drawSVGtoCanvas(svgIcons[r.name], iconX, iconY, iconSize, r.color);
 
-  // --- 棒線とインジケータ ---
-  const barX = 330;   // ← 右に少し移動（以前: 280）
+  // テキスト（縦中央そろえ）
+  ctx.fillStyle = "#fff";
+  ctx.textAlign = "left";
+  ctx.textBaseline = "middle";
+  ctx.fillText(`${r.name} ${r.rank}`, iconX + iconSize + 18, baseY);
+
+  // 棒線（少し右にずらす）
+  const barX = 360;
   const barY = baseY;
-  const barW = 240;
+  const barW = 200;
   const sections = 2;
-
   ctx.strokeStyle = "#aaa";
   ctx.lineWidth = 2;
   ctx.beginPath();
@@ -99,14 +96,21 @@ roles.forEach((r, i) => {
   ctx.lineTo(barX + barW, barY);
   ctx.stroke();
 
-  for (let j = 0; j <= sections; j++) {
+  // 区切り線とラベル
+  const labels = ["好き", "", "苦手"];
+  ctx.font = "18px sans-serif";
+  ctx.fillStyle = "#ccc";
+  ctx.textAlign = "center";
+  labels.forEach((label, j) => {
     const x = barX + (barW / sections) * j;
     ctx.beginPath();
     ctx.moveTo(x, barY - 5);
     ctx.lineTo(x, barY + 5);
     ctx.stroke();
-  }
+    ctx.fillText(label, x, barY + 28);
+  });
 
+  // インジケータ
   const index = r.pos;
   ctx.fillStyle = "#fff";
   ctx.beginPath();
@@ -115,8 +119,7 @@ roles.forEach((r, i) => {
 });
 
 
-
-// ====== キャラアイコン群（ここはそのまま） ======
+// ====== キャラアイコン群 ======
 const icons = {
   "タンク": "assets/tank.png",
   "ダメージ": "assets/damage.png",
@@ -126,28 +129,35 @@ const rolesForIcons = ["タンク", "ダメージ", "サポート"];
 const iconsPerRow = 5;
 const size = 64;
 const padding = 24;
-const startY = 520;
+const startY = 560;
 
 rolesForIcons.forEach((role, ri) => {
   const img = new Image();
   img.src = icons[role];
   img.onload = () => {
-    const baseY = startY + ri * (size * 2 + 100);
+    const baseY = startY + ri * (size * 2 + 120);
     ctx.fillStyle = "#ccc";
-    ctx.font = "28px sans-serif";
-    ctx.fillText(role, 60, baseY - 20);
+    ctx.font = "bold 28px sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText(role, 80, baseY - 20);
+
     for (let i = 0; i < 6; i++) {
-      const x = 60 + (i % iconsPerRow) * (size + padding);
+      const x = 80 + (i % iconsPerRow) * (size + padding);
       const y = baseY + Math.floor(i / iconsPerRow) * (size + 20);
       ctx.drawImage(img, x, y, size, size);
+
       const status = i % 3;
       if (status === 2) {
         ctx.fillStyle = "rgba(0,0,0,0.6)";
         ctx.fillRect(x, y, size, size);
       } else if (status === 0) {
         ctx.fillStyle = "#ff6688";
-        ctx.font = "bold 32px sans-serif";
-        ctx.fillText("♥", x + size - 28, y + 32);
+        ctx.font = "bold 26px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("♥", x + size / 2 + 14, y + size / 2 - 14);
+        ctx.textAlign = "left";
+        ctx.textBaseline = "alphabetic";
       }
     }
   };
