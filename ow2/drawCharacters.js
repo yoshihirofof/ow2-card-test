@@ -52,19 +52,32 @@ function drawCharacters(ctx) {
       const x = 80 + (i % iconsPerRow) * (size + padding);
       const y = currentY + Math.floor(i / iconsPerRow) * (size + 8);
 
-      // イメージ読み込み後に確実に描画
+      // ---- ステータス設定（仮） ----
+      // ここでは例として i % 3 で切り替え（0:得意, 1:使える, 2:苦手）
+      const status = i % 3;  
+
       img.onload = (() => {
         const drawX = x;
         const drawY = y;
         return () => {
-          ctx.drawImage(img, drawX, drawY, size, size);
+          if (status === 2) {
+            // 苦手（モノクロ＋暗め）
+            ctx.filter = "grayscale(100%) brightness(50%)";
+            ctx.drawImage(img, drawX, drawY, size, size);
+            ctx.filter = "none";
+          } else {
+            // 通常 or 得意
+            ctx.drawImage(img, drawX, drawY, size, size);
+          }
 
-          // --- 状態（使用キャラ／未使用キャラ）描画 ---
-          const status = i % 5;
-          if (status === 4) {
-            ctx.fillStyle = "rgba(0,0,0,0.7)";
-            ctx.fillRect(drawX, drawY, size, size);
-          } else if (status === 0) {
+          if (status === 0) {
+            // 得意（ハート＋淡く光る円）
+            ctx.strokeStyle = "rgba(255,102,136,0.6)";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(drawX + size / 2, drawY + size / 2, size / 2 + 3, 0, Math.PI * 2);
+            ctx.stroke();
+
             ctx.fillStyle = "#ff6688";
             ctx.font = "bold 26px sans-serif";
             ctx.textAlign = "center";
@@ -72,6 +85,11 @@ function drawCharacters(ctx) {
             ctx.fillText("♥", drawX + size / 2 + 14, drawY + size / 2 - 14);
             ctx.textAlign = "left";
             ctx.textBaseline = "alphabetic";
+          } else if (status === 1) {
+            // 使える（白い薄い枠）
+            ctx.strokeStyle = "rgba(255,255,255,0.25)";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(drawX, drawY, size, size);
           }
         };
       })();
