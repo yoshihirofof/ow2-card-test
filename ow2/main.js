@@ -16,7 +16,7 @@ ctx.fillText("よっしー", 40, 80);
 
 ctx.font = "24px sans-serif";
 ctx.fillStyle = "#ccc";
-ctx.fillText("Battletag: YOSHI#1234", 40, 120);
+ctx.fillText("Battletag: yoshihiro#11132", 40, 120);
 
 // 区切り線
 ctx.strokeStyle = "#666";
@@ -70,7 +70,7 @@ function drawSVGtoCanvas(svgString, x, y, size, color) {
 
 // ====== ロール描画 ======
 roles.forEach((r, i) => {
-  const baseY = 250 + i * 80;  // 行間
+  const baseY = 200 + i * 80;  // 行間
   const iconSize = 70;
   const iconX = 60;
   const iconY = baseY - iconSize / 2 - 2;
@@ -164,11 +164,17 @@ const characters = {
   ]
 };
 
+const roleLabels = {
+  "タンク": "Tank",
+  "ダメージ": "Damage",
+  "サポート": "Support"
+};
+
 const rolesForIcons = ["タンク", "ダメージ", "サポート"];
 const iconsPerRow = 8;
 const size = 48;
 const padding = 10;
-const startY = 520;
+const startY = 450;
 
 let currentY = startY;
 
@@ -176,7 +182,7 @@ rolesForIcons.forEach((role) => {
   ctx.fillStyle = "#ccc";
   ctx.font = "bold 28px sans-serif";
   ctx.textAlign = "left";
-  ctx.fillText(role, 80, currentY - 20);
+  ctx.fillText(roleLabels[role], 80, currentY - 20);
 
   const charList = characters[role];
 
