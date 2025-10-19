@@ -70,7 +70,7 @@ function drawSVGtoCanvas(svgString, x, y, size, color) {
 // ====== ロール描画 ======
 ctx.font = "24px sans-serif";
 roles.forEach((r, i) => {
-  const baseY = 250 + i * 120;
+  const baseY = 250 + i * 80;  // 行間
   const iconSize = 40; // 少し小さくして行間に馴染ませる
   const iconX = 60;
   const iconY = baseY - iconSize / 2 - 2; // テキストよりちょい上
