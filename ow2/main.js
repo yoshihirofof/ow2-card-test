@@ -74,18 +74,32 @@ roles.forEach((r, i) => {
   const iconX = 60;
   const iconY = baseY - iconSize / 2 - 2;
 
-  // アイコン
+  // --- ◯で囲む ---
+  const circleX = iconX + iconSize / 2;
+  const circleY = iconY + iconSize / 2;
+  const circleRadius = iconSize / 2-8; // 外側に少し余裕
+
+  ctx.beginPath();
+  ctx.arc(circleX, circleY, circleRadius, 0, Math.PI * 2);
+  ctx.strokeStyle = r.color;
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // アイコン描画
   drawSVGtoCanvas(svgIcons[r.name], iconX, iconY, iconSize, r.color);
 
-  // ==== ロール名とランク ====
-  ctx.font = "24px sans-serif";  // ← ロール用フォント
+  // --- ロール名とランク ---
+  ctx.font = "24px sans-serif";
   ctx.fillStyle = "#fff";
   ctx.textAlign = "left";
   ctx.textBaseline = "middle";
-  ctx.fillText(`${r.name} ${r.rank}`, iconX + iconSize + 18, baseY);
 
-  // ==== 棒線 ====
-  const barX = 360;
+  // 「タンク」と「P1」の間を広げたい → スペースを人工的に追加
+  const labelText = `${r.name}    ${r.rank}`; // ← 半角スペースを複数入れる
+  ctx.fillText(labelText, iconX + iconSize + 22, baseY);
+
+  // --- 棒線 ---
+  const barX = 380;
   const barY = baseY;
   const barW = 200;
   const sections = 2;
@@ -96,9 +110,9 @@ roles.forEach((r, i) => {
   ctx.lineTo(barX + barW, barY);
   ctx.stroke();
 
-  // ==== 好き・苦手ラベル ====
+  // --- 好き・苦手ラベル ---
   const labels = ["好き", "", "苦手"];
-  ctx.font = "14px sans-serif";  // ← ラベル用フォント
+  ctx.font = "14px sans-serif";
   ctx.fillStyle = "#ccc";
   ctx.textAlign = "center";
   labels.forEach((label, j) => {
@@ -110,13 +124,14 @@ roles.forEach((r, i) => {
     ctx.fillText(label, x, barY + 26);
   });
 
-  // ==== インジケータ ====
+  // --- インジケータ ---
   const index = r.pos;
   ctx.fillStyle = "#fff";
   ctx.beginPath();
   ctx.arc(barX + (barW / sections) * index, barY - 10, 6, 0, Math.PI * 2);
   ctx.fill();
 });
+
 
 
 
