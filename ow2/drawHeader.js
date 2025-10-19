@@ -2,7 +2,7 @@ function drawHeader(ctx) {
   // ====== プレイヤー情報 ======
   ctx.fillStyle = "#fff";
   ctx.font = "bold 36px sans-serif";
-  ctx.fillText("よっしー", 40, 80);
+  ctx.fillText("ヨシヒロ", 40, 80);
 
   ctx.font = "24px sans-serif";
   ctx.fillStyle = "#ccc";

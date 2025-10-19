@@ -2,7 +2,7 @@ function drawRoles(ctx) {
   // ====== ロール情報 ======
   const roles = [
     { name: "タンク", rank: "D3", pos: 0, color: "#4DA6FF" },
-    { name: "ダメージ", rank: "D5", pos: 1, color: "#FF6666" },
+    { name: "ダメージ", rank: "D4", pos: 1, color: "#FF6666" },
     { name: "サポート", rank: "D4", pos: 0, color: "#66FFAA" },
   ];
 
